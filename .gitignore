@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.ssr/
+.taste-skill/
+shots/
+.DS_Store

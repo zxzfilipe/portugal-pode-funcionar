@@ -1,0 +1,135 @@
+/* Portugal Pode Funcionar: a marca por cima do sistema da skill (MARCA.md).
+   Paleta Mar e Douro, Bricolage Grotesque 800 nos títulos, Newsreader no texto corrido, calçada em /assets. */
+
+:root {
+  --petroleo: #0E5560;
+  --vinho: #7A1F3D;
+  --calcario: #F4F1EA;
+  --tinta: #141414;
+  --secundario: #5A554C;
+  --junta: #BDB6A6;
+  --font-ui: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  /* a calçada: o campo mede --ch de altura; ondas, campo e título partem da mesma origem horizontal,
+     de modo que o "P" do título assenta na linha esquerda do conteúdo */
+  --wrap-l: max(var(--gut), (100vw - 1280px) / 2);
+  --ch: min(516px, 57.333vw, (100svh - var(--nav) - 252px) / 1.4884);
+  --mh: calc(var(--ch) * 0.48837);
+  --tile: calc(var(--ch) * 1.86047);
+  --ox: calc(var(--wrap-l) - var(--ch) * 0.74419);
+}
+@media (max-width: 639px) { :root { --ch: min(516px, 57.333vw); } }
+
+body { font-size: 18px; line-height: 1.6; }
+h1, h2, h3 { color: var(--vinho); font-weight: 800; letter-spacing: -0.02em; }
+.nav__logo, .nav__link, .btn, .t-label, .footer__legal, .pilar-meta, .hero__autor, .pilar-indice, .rodape-lista { font-family: var(--font-ui); }
+.nav__logo { color: var(--vinho); font-weight: 800; letter-spacing: -0.01em; }
+@media (max-width: 1023px) { .nav--split .nav__logo { font-size: 19px; } }
+/* telemóvel: o nome tem 23 letras; a barra fica com o nome e o menu, e o botão principal vai para o menu
+   (o primeiro ecrã já o mostra no hero) */
+@media (max-width: 639px) {
+  .nav--split .nav__logo { font-size: 17px; }
+  .nav.nav--split:not(.is-open) .nav__actions { display: none; }
+  .nav.nav--split:not(.is-open) .nav__toggle { margin-left: auto; }
+}
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+::selection { background: var(--petroleo); color: var(--calcario); }
+
+/* ------------------------------------------------------------ calçada */
+.calcada-tira { display: block; background: var(--junta) url(/assets/calcada.svg) repeat-x; background-size: auto 504px; background-position: var(--tira-x, 0px) bottom; }
+/* uma faixa de calçada é a camada de fundo da sua secção: uma imagem composta (scripts/pedra.mjs) com a
+   origem do título em x = 960 da imagem, posta na mesma escala e na mesma linha esquerda */
+main > section > img.layer.pedra { inset: auto; max-width: none; object-fit: fill; }
+main > section:has(> img.pedra) { overflow: clip; }
+/* a imagem ocupa o ecrã de ponta a ponta; cover dá-lhe a escala do campo (a altura manda) e object-position
+   põe a origem do título na linha esquerda do conteúdo */
+img.pedra--hero { top: var(--nav) !important; left: 0 !important; width: 100% !important; height: calc(var(--mh) + var(--ch)) !important; object-fit: cover !important; object-position: calc(var(--ox) - var(--tile)) 0 !important; }
+img.pedra--mar { bottom: 0 !important; left: 0 !important; width: 100% !important; height: var(--mh) !important; object-fit: cover !important; object-position: calc(var(--ox) - var(--tile)) 0 !important; }
+img.pedra--chao { bottom: 0 !important; left: 0 !important; width: 100% !important; height: var(--chao) !important; object-fit: cover !important; object-position: var(--chao-x, 0px) bottom !important; }
+
+/* ------------------------------------------------------------ hero da página inicial */
+main > .hero.hero--pedra { position: relative; padding: var(--nav) 0 0; }
+.hero--pedra .hero-text { height: 100%; display: flex; flex-direction: column; }
+.hero--pedra .hero__h1 { flex: 0 0 auto; height: calc(var(--mh) + var(--ch)); margin: 0; }
+.hero__base { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px;
+  align-items: start; align-content: center; padding: var(--s-6) 0 var(--s-6); }
+.hero__sub { grid-column: 1 / span 5; font-style: italic; font-size: clamp(1.75rem, 2.6vw, 2.375rem); line-height: 1.12; letter-spacing: -0.01em; text-wrap: balance; }
+.hero__lado { grid-column: 6 / span 7; display: flex; flex-wrap: wrap; gap: var(--s-5) var(--s-7); align-items: center; justify-content: space-between; }
+.hero__autor { font-size: 15px; line-height: 1.4; color: var(--secundario); }
+@media (max-width: 1023px) {
+  .hero__sub, .hero__lado { grid-column: 1 / -1; }
+  .hero__base { align-content: space-between; row-gap: var(--s-6); }
+}
+@media (max-width: 639px) {
+  .hero__base { padding: var(--s-5) 0 var(--s-5); }
+  .hero__lado { flex-direction: column; align-items: stretch; }
+}
+
+/* ------------------------------------------------------------ texto corrido */
+.leitura { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: start; }
+.leitura > h2, .leitura > .leitura__marca { grid-column: 1 / span 5; }
+.leitura > .texto, .leitura > .mo-wh__text { grid-column: 6 / span 7; }
+.leitura > h2, .leitura > .leitura__marca { grid-column: 1 / span 4; }
+.texto { max-width: 39em; display: grid; gap: 1.1em; }
+.texto p { font-size: clamp(1.0625rem, 0.95rem + 0.45vw, 1.25rem); line-height: 1.62; }
+.texto p.abre { font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.75rem); line-height: 1.35; }
+.leitura__marca { font-family: var(--font-ui); font-weight: 800; font-size: clamp(8rem, 16vw, 15rem); line-height: .78; letter-spacing: -0.05em; color: var(--petroleo); opacity: .12; }
+@media (max-width: 1023px) {
+  .leitura > h2, .leitura > .texto, .leitura > .mo-wh__text { grid-column: 1 / -1; }
+  .leitura > h2 { margin-bottom: var(--s-7); }
+  .leitura > .leitura__marca { display: none; }
+}
+/* um texto que não se corta nem se resume: a secção cresce com ele */
+main > section.longo { height: auto; min-height: 100vh; min-height: 100svh; }
+main > section.longo-2 { min-height: 200vh; min-height: 200svh; }
+
+/* ------------------------------------------------------------ índice dos pilares */
+.pilares { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-7) 24px; }
+.pilar-card { display: grid; gap: var(--s-4); color: var(--tinta); }
+.pilar-card .calcada-tira { height: 12px; }
+.pilar-card__corpo { display: flex; gap: var(--s-5); align-items: flex-start; }
+.pilar-n { flex: 0 0 56px; font-family: var(--font-ui); font-weight: 800; font-size: 4.5rem; line-height: .8; letter-spacing: -0.04em; color: var(--petroleo); }
+.pilar-card__t { display: block; font-family: var(--font-ui); font-weight: 700; font-size: 1.5rem; line-height: 1.15; letter-spacing: -0.01em; color: var(--tinta); transition: color 160ms ease; }
+.pilar-card__r { display: block; margin-top: var(--s-2); color: var(--secundario); font-size: 17px; line-height: 1.5; }
+.pilar-card:hover .pilar-card__t, .pilar-card:focus-visible .pilar-card__t { color: var(--petroleo); }
+@media (max-width: 1023px) { .pilares { grid-template-columns: minmax(0, 1fr); gap: var(--s-6); } }
+@media (max-width: 639px) { .pilar-n { flex-basis: 40px; font-size: 3.25rem; } .pilar-card__t { font-size: 1.25rem; } }
+
+/* ------------------------------------------------------------ o país que queremos, sobre petróleo */
+.mar {
+  position: relative;
+  --bg: var(--petroleo); --ink: var(--calcario); --muted: #C9D6D5; --accent: #FFFFFF; --action: var(--calcario); --action-ink: var(--petroleo);
+  background: var(--bg); color: var(--ink);
+}
+main > section.mar { padding-bottom: calc(var(--padb) + var(--bar) + var(--mh)); }
+.mar h2 { color: var(--calcario); }
+.mar .mo-wh__text { font-family: var(--font-ui); font-weight: 600; font-size: clamp(1.5rem, 2.6vw, 2.25rem); line-height: 1.25; letter-spacing: -0.015em; }
+
+/* ------------------------------------------------------------ páginas dos pilares */
+main > .hero.hero--pilar { position: relative; --chao: clamp(96px, 100svh - 540px, 420px); padding-bottom: calc(var(--chao) + var(--s-7)); }
+.hero--pilar .pilar-meta { font-size: 15px; color: var(--secundario); margin-bottom: var(--s-5); }
+.hero--pilar h1 { display: flex; gap: var(--s-6); align-items: flex-start; font-size: clamp(2.5rem, 1.6rem + 3.6vw, 4.5rem); line-height: 1.02; max-width: 15em; }
+.hero--pilar h1 .pilar-n { flex: 0 0 auto; font-size: 1.6em; line-height: .78; }
+.hero--pilar .hero__lead { margin-top: var(--s-6); max-width: 34em; font-size: clamp(1.15rem, 1rem + .6vw, 1.5rem); line-height: 1.4; }
+.pilar-indice { display: flex; flex-wrap: wrap; gap: 0 var(--s-6); margin-top: var(--s-5); font-size: 16px; }
+.pilar-indice a { display: inline-flex; min-height: 44px; align-items: center; color: var(--petroleo); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+@media (max-width: 639px) {
+  main > .hero.hero--pilar { --chao: clamp(120px, 100svh - 480px, 400px); }
+  .hero--pilar h1 { gap: var(--s-4); }
+  .pilar-indice { gap: 0 var(--s-5); }
+}
+
+/* ------------------------------------------------------------ rodapé */
+.closing .rodape-tira { height: 24px; margin-bottom: var(--s-7); }
+.closing .footer__lede { font-family: var(--font-text); font-style: italic; font-weight: 400; font-size: 1.375rem; line-height: 1.25; max-width: 18em; }
+.rodape-nome { font-family: var(--font-ui); font-weight: 800; letter-spacing: -0.01em; color: var(--vinho); font-size: 20px; }
+.rodape-lista { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; font-size: 16px; }
+.rodape-lista a { display: inline-flex; min-height: 44px; align-items: center; }
+@media (max-width: 639px) { .rodape-lista { grid-template-columns: minmax(0, 1fr); } }
+.vizinhos { display: flex; flex-wrap: wrap; gap: var(--s-4) var(--s-5); align-items: center; }
+@media (max-width: 639px) { .vizinhos { flex-direction: column; align-items: stretch; } }
+/* telemóvel: os oito pilares empilhados ocupam o que ocupam, sem vazio no fim */
+@media (max-width: 639px) { main > section.pilares-sec { height: auto; min-height: 100svh; } }
+@media (max-width: 639px) { .hero__sub { font-size: clamp(2.25rem, 10.5vw, 2.75rem); line-height: 1.08; } }
+/* páginas dos pilares: o texto corre como um ensaio, cada secção com a altura do que diz */
+main > section.fluxo { height: auto; min-height: 0; padding-top: var(--padt); padding-bottom: 0; }
+main > section.fluxo:last-child { padding-bottom: var(--padt); }
