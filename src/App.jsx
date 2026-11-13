@@ -1,59 +1,22 @@
 import { aoQueVimos, final, pilares, subtitulo, autor, data, slug } from './content/manifesto.js';
 
-const Seta = () => (
-  <svg className="m-arrow" viewBox="0 0 12 12" aria-hidden="true">
-    <path className="m-arrow__stem" d="M1 6h8" /><path className="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5" />
-  </svg>
-);
-
 const Paras = ({ list, abre = false }) => list.map((t, i) => <p key={i} className={abre && i === 0 ? 'abre' : undefined}>{t}</p>);
 
-function Nav({ inicio }) {
-  const h = inicio ? '' : '/';
+function Rodape({ atual = null }) {
   return (
-    <header className="nav nav--split">
-      <div className="wrap nav__bar">
-        <a className="skip-link" href="#top">Saltar para o conteúdo</a>
-        <a className="nav__logo" href={inicio ? '#top' : '/'}>Portugal Pode Funcionar</a>
-        <nav className="nav__links" aria-label="Principal">
-          <div className="nav__item"><a className="nav__link" href={`${h}#ao-que-vimos`}>Manifesto</a></div>
-          <div className="nav__item"><a className="nav__link" href={`${h}#pilares`} aria-current={inicio ? undefined : 'page'}>Pilares</a></div>
-          <div className="nav__item"><a className="nav__link" href={`${h}#o-pais-que-queremos`}>Futuro</a></div>
-        </nav>
-        <div className="nav__actions">
-          <a className="btn btn--primary" href={inicio ? '#pilares' : '/pilar/1/'}>{inicio ? 'Ler os pilares' : 'Ler do início'}</a>
+    <footer className="rodape">
+      <div className="calcada-tira rodape__tira" aria-hidden="true" style={{ '--tira-x': `${atual ? -137 * atual.n : 0}px` }} />
+      <div className="wrap rodape__grelha">
+        <div className="rodape__marca">
+          <a className="rodape-nome" href="/">Portugal Pode Funcionar</a>
+          <p className="rodape__lede">{subtitulo}</p>
         </div>
-        <button className="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
-          <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
-        </button>
-      </div>
-    </header>
-  );
-}
-
-function Rodape({ children, tira = 0, atual = null }) {
-  return (
-    <footer className="footer closing" id="contact" aria-labelledby="close-h">
-      <div className="wrap">
-        <div className="closing__cta close--type">{children}</div>
-        <div className="closing__links">
-          <div className="calcada-tira rodape-tira" aria-hidden="true" style={{ '--tira-x': `${tira}px` }} />
-          <div className="grid">
-            <div className="span-4 stack-4">
-              <a className="rodape-nome" href="/">Portugal Pode Funcionar</a>
-              <p className="footer__lede">{subtitulo}</p>
-            </div>
-            <div className="span-7 start-6 footer__col">
-              <h3>Os oito pilares</h3>
-              <ul className="rodape-lista">
-                {pilares.map(p => (
-                  <li key={p.n}><a href={p.href} aria-current={p === atual ? 'page' : undefined}>{p.n}. {p.nome}</a></li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <div className="footer__legal"><span>© 2026 Portugal Pode Funcionar. {autor}, {data}.</span></div>
-        </div>
+        <ul className="rodape-lista" aria-label="Os oito pilares">
+          {pilares.map(p => (
+            <li key={p.n}><a href={p.href} aria-current={p === atual ? 'page' : undefined}>{p.n}. {p.nome}</a></li>
+          ))}
+        </ul>
+        <p className="rodape__legal">© 2026 Portugal Pode Funcionar. {autor}, {data}.</p>
       </div>
     </footer>
   );
@@ -63,7 +26,6 @@ function Inicio() {
   const [antes, depois] = final.intro[0].split('vai escolher ficar');
   return (
     <>
-      <Nav inicio />
       <main id="top">
         <section className="hero hero--pedra" data-enter aria-labelledby="hero-h">
           <img className="layer pedra pedra--hero" src="/assets/pedra-hero.svg" alt="" aria-hidden="true" data-enter-media width="4800" height="768" fetchPriority="high" />
@@ -74,16 +36,13 @@ function Inicio() {
               </h1>
               <div className="hero__base">
                 <p className="hero__sub">{subtitulo}</p>
-                <div className="hero__lado">
-                  <p className="hero__autor">{autor}<br />{data}</p>
-                  <a className="btn btn--primary" href="#pilares">Ler os oito pilares<Seta /></a>
-                </div>
+                <p className="hero__autor">{autor}<br />{data}</p>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="section longo longo-2" id="ao-que-vimos" aria-labelledby="ao-que-vimos-h">
+        <section className="section fluxo" id="ao-que-vimos" aria-labelledby="ao-que-vimos-h">
           <div className="wrap">
             <div className="leitura">
               <h2 id="ao-que-vimos-h">{aoQueVimos.title}</h2>
@@ -92,7 +51,7 @@ function Inicio() {
           </div>
         </section>
 
-        <section className="section pilares-sec" id="pilares" aria-labelledby="pilares-h">
+        <section className="section fluxo" id="pilares" aria-labelledby="pilares-h">
           <div className="wrap">
             <div className="section-head"><h2 id="pilares-h">Os oito pilares</h2></div>
             <div className="pilares">
@@ -109,7 +68,7 @@ function Inicio() {
           </div>
         </section>
 
-        <section className="section statement mar" id="o-pais-que-queremos" data-moment="word-highlight" aria-labelledby="futuro-h">
+        <section className="section fluxo statement mar" id="o-pais-que-queremos" data-moment="word-highlight" aria-labelledby="futuro-h">
           <img className="layer pedra pedra--mar" src="/assets/pedra-ondas.svg" alt="" aria-hidden="true" width="4800" height="252" loading="lazy" />
           <div className="wrap">
             <div className="leitura">
@@ -119,13 +78,7 @@ function Inicio() {
           </div>
         </section>
       </main>
-      <Rodape>
-        <div className="section-head">
-          <h2 id="close-h">Ler o manifesto pilar a pilar</h2>
-          <p>Cada pilar tem a sua página, do Estado que constrói a Portugal no mundo.</p>
-        </div>
-        <a className="btn btn--primary" href="/pilar/1/">Ler os oito pilares<Seta /></a>
-      </Rodape>
+      <Rodape />
     </>
   );
 }
@@ -137,12 +90,11 @@ function Pilar({ n }) {
   const seg = pilares[i + 1];
   return (
     <>
-      <Nav />
+      <header className="topo"><div className="wrap"><a className="topo__nome" href="/">Portugal Pode Funcionar</a></div></header>
       <main id="top">
-        <section className="hero hero--pilar" data-enter aria-labelledby="hero-h">
-          <img className="layer pedra pedra--chao" src="/assets/pedra-calcada.svg" alt="" aria-hidden="true" width="4800" height="504" style={{ '--chao-x': `${-137 * n}px` }} />
+        <section className="abertura" aria-labelledby="hero-h">
           <div className="wrap">
-            <div className="hero-text">
+            <div>
               <p className="pilar-meta">Pilar {n} de 8</p>
               <h1 id="hero-h"><span className="pilar-n">{n}</span><span>{p.nome}</span></h1>
               <p className="hero__lead">{p.resumo}</p>
@@ -153,6 +105,7 @@ function Pilar({ n }) {
               )}
             </div>
           </div>
+          <div className="calcada-tira abertura__chao" aria-hidden="true" style={{ '--tira-x': `${-137 * n}px` }} />
         </section>
 
         {p.intro.length > 0 && (
@@ -177,20 +130,15 @@ function Pilar({ n }) {
           </section>
         ))}
       </main>
-      <Rodape tira={-137 * n} atual={p}>
-        <div className="section-head">
-          <h2 id="close-h">{seg ? `Pilar ${seg.n}: ${seg.nome}` : final.title}</h2>
-          <p>{seg ? seg.resumo : final.intro[0]}</p>
-        </div>
-        <div className="vizinhos">
-          {seg
-            ? <a className="btn btn--primary" href={seg.href}>Ler o pilar seguinte<Seta /></a>
-            : <a className="btn btn--primary" href="/#o-pais-que-queremos">Ler O país que queremos<Seta /></a>}
-          {ant
-            ? <a className="btn btn--secondary" href={ant.href}>Pilar anterior: {ant.nome}</a>
-            : <a className="btn btn--secondary" href="/#ao-que-vimos">Voltar a Ao que vimos</a>}
-        </div>
-      </Rodape>
+      <nav className="vizinhos wrap" aria-label="Outros pilares">
+        {ant
+          ? <a className="vizinho" href={ant.href}><span className="vizinho__r">Pilar anterior</span><span className="vizinho__t">{ant.n}. {ant.nome}</span></a>
+          : <a className="vizinho" href="/#ao-que-vimos"><span className="vizinho__r">Voltar ao início</span><span className="vizinho__t">{aoQueVimos.title}</span></a>}
+        {seg
+          ? <a className="vizinho vizinho--seg" href={seg.href}><span className="vizinho__r">Pilar seguinte</span><span className="vizinho__t">{seg.n}. {seg.nome}</span></a>
+          : <a className="vizinho vizinho--seg" href="/#o-pais-que-queremos"><span className="vizinho__r">Para terminar</span><span className="vizinho__t">{final.title}</span></a>}
+      </nav>
+      <Rodape atual={p} />
     </>
   );
 }
