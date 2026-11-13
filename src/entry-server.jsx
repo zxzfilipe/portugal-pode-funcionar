@@ -1,5 +1,5 @@
 import { renderToStaticMarkup } from 'react-dom/server';
-import App, { rotas } from './App.jsx';
+import { Inicio, Perdido, rotas, redirecionamentos } from './App.jsx';
 
-export { rotas };
-export const render = page => renderToStaticMarkup(<App page={page} />);
+export { rotas, redirecionamentos };
+export const render = page => renderToStaticMarkup(page === 'perdido' ? <Perdido /> : <Inicio />);

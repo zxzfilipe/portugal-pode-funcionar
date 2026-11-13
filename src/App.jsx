@@ -1,65 +1,110 @@
 import { aoQueVimos, final, pilares, subtitulo, autor, data, slug } from './content/manifesto.js';
 
-const Paras = ({ list, abre = false }) => list.map((t, i) => <p key={i} className={abre && i === 0 ? 'abre' : undefined}>{t}</p>);
+// Uma só página, lida de corrido: a abertura em calçada com o globo, Ao que vimos, o índice,
+// os oito pilares por inteiro e O país que queremos. O texto vem tal e qual de manifesto.txt.
 
-function Rodape({ atual = null }) {
+const Paras = ({ list, abre = false }) => list.map((t, i) => <p key={i} className={abre && i === 0 ? 'abre' : undefined}>{t}</p>);
+const ancora = p => `pilar-${p.n}`;
+const Seta = () => <span aria-hidden="true">↑</span>;
+
+function Abertura() {
+  return (
+    <section className="abertura" aria-labelledby="titulo">
+      <div className="abertura__palco">
+        <div className="wrap abertura__pedra">
+          <div className="pedra pedra--ondas" aria-hidden="true" />
+          <div className="pedra pedra--campo" aria-hidden="true" />
+          <div className="pedra pedra--titulo" aria-hidden="true" />
+          <h1 id="titulo" className="sr">Portugal Pode Funcionar</h1>
+          <figure className="globo" role="img" aria-label="Globo em calçada portuguesa: o mundo roda até Portugal ficar ao centro, entre a Europa, a África e as Américas, com a zona económica exclusiva portuguesa demarcada a vinho.">
+            <canvas className="globo__tela" data-modelo="/assets/globo.json" aria-hidden="true" />
+            <noscript>
+              <img className="globo__fixo" src="/assets/globo-base.svg" alt="" width="780" height="780" />
+              <img className="globo__fixo" src="/assets/globo-zee.svg" alt="" width="780" height="780" />
+            </noscript>
+          </figure>
+        </div>
+        <div className="wrap abertura__base">
+          <p className="abertura__legenda"><span className="amostra" aria-hidden="true" />Zona económica exclusiva de Portugal</p>
+          <span className="abertura__deixa" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16"><path d="M8 2v11M3.5 8.5 8 13l4.5-4.5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
+          <p className="abertura__sub">{subtitulo}</p>
+          <p className="abertura__autor"><span>{autor}</span> <span>{data}</span></p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Pilar({ p }) {
+  const id = ancora(p);
+  return (
+    <section className="seccao pilar" id={id} aria-labelledby={`${id}-h`}>
+      <div className="wrap">
+        <div className="calcada-tira pilar__tira" aria-hidden="true" style={{ '--tira-x': `${-137 * p.n}px` }} />
+        <div className="leitura">
+          <div className="lado pilar__cabeca">
+            <span className="numero" aria-hidden="true">{p.n}</span>
+            <h2 id={`${id}-h`}>{p.nome}</h2>
+          </div>
+          <div className="texto"><Paras list={p.intro} abre /></div>
+        </div>
+        {p.subs.map(s => (
+          <div key={s.title} className="leitura pilar__parte" id={`${id}-${slug(s.title)}`}>
+            <h3 className="lado">{s.title}</h3>
+            <div className="texto"><Paras list={s.paras} /></div>
+          </div>
+        ))}
+        <div className="leitura">
+          <p className="pilar__voltar"><a href="#pilares"><Seta /><u>Voltar aos oito pilares</u></a></p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Rodape() {
   return (
     <footer className="rodape">
-      <div className="calcada-tira rodape__tira" aria-hidden="true" style={{ '--tira-x': `${atual ? -137 * atual.n : 0}px` }} />
       <div className="wrap rodape__grelha">
         <div className="rodape__marca">
-          <a className="rodape-nome" href="/">Portugal Pode Funcionar</a>
+          <a className="rodape__nome" href="#top">Portugal Pode Funcionar</a>
           <p className="rodape__lede">{subtitulo}</p>
         </div>
-        <ul className="rodape-lista" aria-label="Os oito pilares">
-          {pilares.map(p => (
-            <li key={p.n}><a href={p.href} aria-current={p === atual ? 'page' : undefined}>{p.n}. {p.nome}</a></li>
-          ))}
+        <ul className="rodape__lista" aria-label="Os oito pilares">
+          {pilares.map(p => <li key={p.n}><a href={`#${ancora(p)}`}>{p.n}. {p.nome}</a></li>)}
         </ul>
-        <p className="rodape__legal">© 2026 Portugal Pode Funcionar. {autor}, {data}.</p>
+        <div className="rodape__legal">
+          <p>© 2026 Portugal Pode Funcionar. {autor}, {data}.</p>
+          <p>Globo em calçada feito com dados do <a href="https://www.naturalearthdata.com/" rel="noopener">Natural Earth</a> e do <a href="https://www.marineregions.org/" rel="noopener">Marine Regions</a> (Flanders Marine Institute, CC BY 4.0).</p>
+        </div>
       </div>
     </footer>
   );
 }
 
-function Inicio() {
+export function Inicio() {
   const [antes, depois] = final.intro[0].split('vai escolher ficar');
   return (
     <>
       <main id="top">
-        <section className="hero hero--pedra" data-enter aria-labelledby="hero-h">
-          <img className="layer pedra pedra--hero" src="/assets/pedra-hero.svg" alt="" aria-hidden="true" data-enter-media width="4800" height="768" fetchPriority="high" />
-          <div className="wrap">
-            <div className="hero-text">
-              <h1 id="hero-h" className="hero__h1">
-                <span className="sr">Portugal Pode Funcionar</span>
-              </h1>
-              <div className="hero__base">
-                <p className="hero__sub">{subtitulo}</p>
-                <p className="hero__autor">{autor}<br />{data}</p>
-              </div>
-            </div>
+        <Abertura />
+
+        <section className="seccao" id="ao-que-vimos" aria-labelledby="ao-que-vimos-h">
+          <div className="wrap leitura">
+            <h2 className="lado" id="ao-que-vimos-h">{aoQueVimos.title}</h2>
+            <div className="texto"><Paras list={aoQueVimos.intro} abre /></div>
           </div>
         </section>
 
-        <section className="section fluxo" id="ao-que-vimos" aria-labelledby="ao-que-vimos-h">
+        <section className="seccao" id="pilares" aria-labelledby="pilares-h">
           <div className="wrap">
-            <div className="leitura">
-              <h2 id="ao-que-vimos-h">{aoQueVimos.title}</h2>
-              <div className="texto"><Paras list={aoQueVimos.intro} abre /></div>
-            </div>
-          </div>
-        </section>
-
-        <section className="section fluxo" id="pilares" aria-labelledby="pilares-h">
-          <div className="wrap">
-            <div className="section-head"><h2 id="pilares-h">Os oito pilares</h2></div>
+            <h2 id="pilares-h">Os oito pilares</h2>
             <div className="pilares">
-              {pilares.map((p, i) => (
-                <a key={p.n} className="pilar-card" href={p.href}>
-                  <span className="calcada-tira" aria-hidden="true" style={{ '--tira-x': `${-137 * (i + 1)}px` }} />
+              {pilares.map(p => (
+                <a key={p.n} className="pilar-card" href={`#${ancora(p)}`}>
+                  <span className="calcada-tira" aria-hidden="true" style={{ '--tira-x': `${-137 * p.n}px` }} />
                   <span className="pilar-card__corpo">
-                    <span className="pilar-n" aria-hidden="true">{p.n}</span>
+                    <span className="numero" aria-hidden="true">{p.n}</span>
                     <span><span className="pilar-card__t">{p.nome}</span><span className="pilar-card__r">{p.resumo}</span></span>
                   </span>
                 </a>
@@ -68,14 +113,14 @@ function Inicio() {
           </div>
         </section>
 
-        <section className="section fluxo statement mar" id="o-pais-que-queremos" data-moment="word-highlight" aria-labelledby="futuro-h">
-          <img className="layer pedra pedra--mar" src="/assets/pedra-ondas.svg" alt="" aria-hidden="true" width="4800" height="252" loading="lazy" />
-          <div className="wrap">
-            <div className="leitura">
-              <h2 id="futuro-h">{final.title}</h2>
-              <p className="mo-wh__text">{antes}<strong>vai escolher ficar</strong>{depois}</p>
-            </div>
+        {pilares.map(p => <Pilar key={p.n} p={p} />)}
+
+        <section className="mar" id="o-pais-que-queremos" aria-labelledby="futuro-h">
+          <div className="wrap leitura">
+            <h2 className="lado" id="futuro-h">{final.title}</h2>
+            <p className="mar__texto" data-acende="">{antes}<strong>vai escolher ficar</strong>{depois}</p>
           </div>
+          <div className="mar__ondas" aria-hidden="true" />
         </section>
       </main>
       <Rodape />
@@ -83,72 +128,21 @@ function Inicio() {
   );
 }
 
-function Pilar({ n }) {
-  const i = n - 1;
-  const p = pilares[i];
-  const ant = pilares[i - 1];
-  const seg = pilares[i + 1];
+export function Perdido() {
   return (
-    <>
-      <header className="topo"><div className="wrap"><a className="topo__nome" href="/">Portugal Pode Funcionar</a></div></header>
-      <main id="top">
-        <section className="abertura" aria-labelledby="hero-h">
-          <div className="wrap">
-            <div>
-              <p className="pilar-meta">Pilar {n} de 8</p>
-              <h1 id="hero-h"><span className="pilar-n">{n}</span><span>{p.nome}</span></h1>
-              <p className="hero__lead">{p.resumo}</p>
-              {p.subs.length > 0 && (
-                <ul className="pilar-indice" aria-label="Neste pilar">
-                  {p.subs.map(s => <li key={s.title}><a href={`#${slug(s.title)}`}>{s.title}</a></li>)}
-                </ul>
-              )}
-            </div>
-          </div>
-          <div className="calcada-tira abertura__chao" aria-hidden="true" style={{ '--tira-x': `${-137 * n}px` }} />
-        </section>
-
-        {p.intro.length > 0 && (
-          <section className="section fluxo" id="texto" aria-label={p.nome}>
-            <div className="wrap">
-              <div className="leitura">
-                <p className="leitura__marca" aria-hidden="true">{n}</p>
-                <div className="texto"><Paras list={p.intro} abre /></div>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {p.subs.map(s => (
-          <section key={s.title} className="section fluxo" id={slug(s.title)} aria-labelledby={`${slug(s.title)}-h`}>
-            <div className="wrap">
-              <div className="leitura">
-                <h2 id={`${slug(s.title)}-h`}>{s.title}</h2>
-                <div className="texto"><Paras list={s.paras} /></div>
-              </div>
-            </div>
-          </section>
-        ))}
-      </main>
-      <nav className="vizinhos wrap" aria-label="Outros pilares">
-        {ant
-          ? <a className="vizinho" href={ant.href}><span className="vizinho__r">Pilar anterior</span><span className="vizinho__t">{ant.n}. {ant.nome}</span></a>
-          : <a className="vizinho" href="/#ao-que-vimos"><span className="vizinho__r">Voltar ao início</span><span className="vizinho__t">{aoQueVimos.title}</span></a>}
-        {seg
-          ? <a className="vizinho vizinho--seg" href={seg.href}><span className="vizinho__r">Pilar seguinte</span><span className="vizinho__t">{seg.n}. {seg.nome}</span></a>
-          : <a className="vizinho vizinho--seg" href="/#o-pais-que-queremos"><span className="vizinho__r">Para terminar</span><span className="vizinho__t">{final.title}</span></a>}
-      </nav>
-      <Rodape atual={p} />
-    </>
+    <main className="wrap perdido">
+      <div className="calcada-tira" aria-hidden="true" />
+      <h1 className="sr">Portugal Pode Funcionar</h1>
+      <h2>Esta página não existe</h2>
+      <p>O manifesto está todo numa só página.</p>
+      <p><a href="/">Ir para o início</a></p>
+    </main>
   );
 }
 
 export const rotas = [
   { path: '/', page: 'inicio', title: 'Portugal Pode Funcionar: manifesto em oito pilares', desc: `${subtitulo} Um manifesto de ${autor}, de ${data}.` },
-  ...pilares.map(p => ({ path: p.href, page: `pilar-${p.n}`, title: `${p.nome}: pilar ${p.n} de Portugal Pode Funcionar`, desc: p.resumo })),
 ];
 
-export default function App({ page }) {
-  if (page === 'inicio') return <Inicio />;
-  return <Pilar n={Number(page.replace('pilar-', ''))} />;
-}
+// os endereços antigos de cada pilar levam à sua secção na página única
+export const redirecionamentos = pilares.map(p => ({ path: p.href, para: `/#${ancora(p)}`, title: `${p.nome}: Portugal Pode Funcionar` }));

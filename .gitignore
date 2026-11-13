@@ -1,6 +1,10 @@
 node_modules/
 dist/
 .ssr/
+.cliente/
 .taste-skill/
 shots/
+verificacao/
 .DS_Store
+# gerados pelo build (npm run globo), a partir de marca/ e scripts/dados/
+public/assets/
