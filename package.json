@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "build": "node scripts/pedra.mjs && vite build && node prerender.mjs",
-    "preview": "npx --yes serve@14.2.4 dist"
+    "preview": "npx --yes serve@14.2.4 dist",
+    "publicar": "sh scripts/publicar.sh"
   },
   "keywords": [],
   "author": "",
