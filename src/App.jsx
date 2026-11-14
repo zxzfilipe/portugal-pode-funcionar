@@ -1,4 +1,4 @@
-import { aoQueVimos, final, pilares, subtitulo, autor, data, slug, instagram } from './content/manifesto.js';
+import { aoQueVimos, final, pilares, subtitulo, autor, data, slug, instagram, linkedin } from './content/manifesto.js';
 
 // Uma só página, lida de corrido: a abertura em calçada com o globo, Ao que vimos, o índice,
 // os oito pilares por inteiro e O país que queremos. O texto vem tal e qual de manifesto.txt.
@@ -28,7 +28,7 @@ function Abertura() {
           <p className="abertura__legenda"><span className="amostra" aria-hidden="true" />Zona económica exclusiva de Portugal</p>
           <span className="abertura__deixa" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16"><path d="M8 2v11M3.5 8.5 8 13l4.5-4.5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
           <p className="abertura__sub">{subtitulo}</p>
-          <p className="abertura__autor"><span>{autor}</span> <span>{data}</span></p>
+          <p className="abertura__autor"><span><a href={linkedin} rel="noopener me">{autor}</a></span> <span>{data}</span></p>
         </div>
       </div>
     </section>
@@ -74,7 +74,7 @@ function Rodape() {
           {pilares.map(p => <li key={p.n}><a href={`#${ancora(p)}`}>{p.n}. {p.nome}</a></li>)}
         </ul>
         <div className="rodape__legal">
-          <p>© 2026 Portugal Pode Funcionar. {autor}, {data}.</p>
+          <p>© 2026 Portugal Pode Funcionar. <a href={linkedin} rel="noopener me">{autor}</a>, {data}.</p>
           <p>Globo em calçada feito com dados do <a href="https://www.naturalearthdata.com/" rel="noopener">Natural Earth</a> e do <a href="https://www.marineregions.org/" rel="noopener">Marine Regions</a> (Flanders Marine Institute, CC BY 4.0).</p>
         </div>
       </div>

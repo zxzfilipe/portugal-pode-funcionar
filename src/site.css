@@ -84,6 +84,8 @@ p { text-wrap: pretty; }
 .abertura__sub { font-style: italic; font-size: clamp(1.875rem, 1.2rem + 3vw, 2.25rem); line-height: 1.1; letter-spacing: -0.01em; text-wrap: balance; }
 .abertura__autor, .abertura__legenda { font-family: var(--titulos); font-size: 15px; line-height: 1.4; color: var(--secundario); }
 .abertura__autor span + span::before { content: " · "; }
+.abertura__autor a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.abertura__autor a:hover { color: var(--petroleo); }
 .abertura__legenda { display: flex; align-items: center; gap: 10px; opacity: clamp(0, (var(--mare, 1) - 0.03) * 7, 1); }
 /* a deixa: uma seta que desce, só enquanto a cena não começou (e só com JavaScript e movimento) */
 .abertura__deixa { display: none; }

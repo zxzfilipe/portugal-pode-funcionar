@@ -49,7 +49,7 @@ for (const e of ECRAS) {
   if (m.imgs.length) falha(e.nome, 'imagens por carregar: ' + m.imgs.join(', '));
   if (m.globo !== 'vivo' || !m.cena) falha(e.nome, `o globo devia estar vivo e a cena montada (globo: ${m.globo}, cena: ${m.cena})`);
   await p.screenshot({ path: `${OUT}/${e.nome}-0-chegada.png` });
-  for (const [k, t] of [['1-centro', 0.05], ['2-mare', 0.5], ['3-fim', 1]]) {
+  for (const [k, t] of [['1-centro', 0.5], ['2-mare', 0.64], ['3-fim', 1]]) {
     await p.evaluate(y => scrollTo(0, y), Math.round(-m.topo + t * m.percurso)); await espera(1300);
     await p.screenshot({ path: `${OUT}/${e.nome}-${k}.png` });
   }

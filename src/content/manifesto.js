@@ -19,6 +19,9 @@ const resumos = [...marca.matchAll(/^(\d)\.\s+(.+)$/gm)].map(m => m[2]);
 // A conta para seguir, no fim da página ("Acreditas na visão?").
 export const instagram = { nome: '@portugalpodefuncionar.pt', url: 'https://www.instagram.com/portugalpodefuncionar.pt/' };
 
+// O nome do autor leva ao seu LinkedIn.
+export const linkedin = 'https://www.linkedin.com/in/filipembt/';
+
 export const subtitulo = 'Um país do futuro precisa de instituições do futuro.';
 export const autor = 'Filipe Ferreira';
 export const data = '26 de outubro de 2026';

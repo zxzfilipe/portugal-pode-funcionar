@@ -13,7 +13,7 @@ o índice dos oito pilares, os oito pilares por inteiro e "O país que queremos"
 | `src/content/MARCA.md`, `marca/` | A marca: cores, tipos de letra e os SVG originais da calçada. |
 | `src/App.jsx` | A página, em componentes React. O build transforma-a em HTML estático (`prerender.mjs`); no browser não corre React. |
 | `src/site.css` | Todo o CSS, escrito para esta página. Vai dentro do HTML. |
-| `src/cliente/site.js` | O que corre no browser: o globo, que faz a viagem toda ao primeiro scroll, e as palavras que se acendem no fim. |
+| `src/cliente/site.js` | O que corre no browser: o globo conduzido pelo scroll e as palavras que se acendem no fim. |
 | `src/globo/` | O globo: as pedras assentes na esfera em anéis à volta de Portugal (`pedras.js`) e o desenho em WebGL (`globo.js`). |
 | `scripts/globo-modelo.mjs` | Decide a cor de cada pedra (mar, ZEE, terra, Portugal) e corta pela costa as que ficam a meio. Sai `public/assets/globo.json`. |
 | `scripts/globo.mjs` | O globo fixo (dois SVG), para quem não tem JavaScript ou WebGL. |
@@ -22,7 +22,7 @@ o índice dos oito pilares, os oito pilares por inteiro e "O país que queremos"
 
 ## O globo
 
-Uma esfera em calçada, com as fiadas a irradiar do centro geodésico de Portugal continental (Vila de Rei). Ao primeiro scroll, sozinho,
+Uma esfera em calçada, com as fiadas a irradiar do centro geodésico de Portugal continental (Vila de Rei). Com o scroll,
 o mundo roda até Portugal ficar ao centro, a zona económica exclusiva tinge-se de vinho da costa até ao limite das 200
 milhas, e a vista aproxima-se do mar português. Com "reduzir movimento" ligado fica parado, já com Portugal ao centro;
 sem JavaScript ou sem WebGL aparece o globo fixo.
