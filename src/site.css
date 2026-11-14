@@ -46,14 +46,14 @@ p { text-wrap: pretty; }
   --mh: calc(var(--ch) * 0.48837);                         /* a altura das ondas */
   --tile: calc(var(--ch) * 1.86047);                       /* a largura de um ladrilho */
   --fiada: calc(var(--ch) * 12 / 516);
-  --gd: min(var(--ww), 520px, max(240px, 100vh - var(--ch) - 60px));   /* o diâmetro do globo: cabe no ecrã com o título */
+  --gd: min(var(--ww), 520px, max(240px, 100vh - var(--mh) - var(--ch) - var(--fiada) * 4));   /* o diâmetro do globo: a pedra acaba onde acaba o primeiro ecrã */
   --ty: 0px;                                               /* quanto o título desce dentro do campo */
   --gt: var(--ch);                                         /* quanto o globo desce dentro do campo */
   --bh: calc(var(--ch) + var(--gd) + var(--fiada) * 4);    /* a altura do campo */
   --base: 0px;
   position: relative;
 }
-@supports (height: 1svh) { .abertura { --ch: min(57.333vw, 400px, 34svh); --gd: min(var(--ww), 520px, max(240px, 100svh - var(--ch) - 60px)); } }
+@supports (height: 1svh) { .abertura { --ch: min(57.333vw, 400px, 34svh); --gd: min(var(--ww), 520px, max(240px, 100svh - var(--mh) - var(--ch) - var(--fiada) * 4)); } }
 @media (min-width: 900px) {
   /* ecrãs largos: título à esquerda, globo à direita, tudo num ecrã */
   .abertura {
@@ -84,12 +84,13 @@ p { text-wrap: pretty; }
 .abertura__sub { font-style: italic; font-size: clamp(1.875rem, 1.2rem + 3vw, 2.25rem); line-height: 1.1; letter-spacing: -0.01em; text-wrap: balance; }
 .abertura__autor, .abertura__legenda { font-family: var(--titulos); font-size: 15px; line-height: 1.4; color: var(--secundario); }
 .abertura__autor span + span::before { content: " · "; }
-.abertura__legenda { display: flex; align-items: center; gap: 10px; opacity: var(--mare, 1); }
+.abertura__legenda { display: flex; align-items: center; gap: 10px; opacity: clamp(0, (var(--mare, 1) - 0.03) * 7, 1); }
 /* a deixa: uma seta que desce, só enquanto a cena não começou (e só com JavaScript e movimento) */
 .abertura__deixa { display: none; }
 .abertura--cena .abertura__deixa { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--junta); color: var(--petroleo);
   grid-area: 1 / 1; opacity: calc(1 - var(--t, 0) * 14); pointer-events: none; }
-.abertura--cena .abertura__deixa svg { animation: desce 1.8s cubic-bezier(.4, 0, .2, 1) infinite; }
+/* a seta mexe-se três vezes (menos de 5 segundos) e fica quieta: nada na página se move sem fim */
+.abertura--cena .abertura__deixa svg { animation: desce 1.6s cubic-bezier(.4, 0, .2, 1) 3; }
 .abertura--cena .abertura__legenda { grid-area: 1 / 1; }
 @keyframes desce { 0%, 100% { transform: translateY(-3px); } 50% { transform: translateY(3px); } }
 .amostra { flex: none; width: 14px; height: 14px; border-radius: 2px; background: var(--vinho); box-shadow: 0 0 0 2px var(--calcario), 0 0 0 3px var(--junta); }
@@ -111,15 +112,18 @@ p { text-wrap: pretty; }
 }
 @keyframes assentar { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
 
-/* ------------------------------------------------------------ o texto */
+/* ------------------------------------------------------------ o texto
+   Duas colunas em ecrãs largos: o título à esquerda (fica à vista enquanto se lê) e o texto da linha central à
+   margem direita, a mesma linha do índice dos pilares e do rodapé. Em ecrãs estreitos, uma coluna só. */
 .seccao { padding-top: var(--ar); }
 .leitura { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: start; }
-.lado { grid-column: 1 / span 4; position: sticky; top: 32px; }
-.texto { grid-column: 6 / span 7; max-width: 34em; display: grid; gap: 1.1em; }
+.lado { grid-column: 1 / span 5; position: sticky; top: 32px; }
+.texto { grid-column: 7 / span 6; display: grid; gap: 1.1em; }
 .texto p.abre { font-size: clamp(1.375rem, 1.1rem + 1vw, 1.75rem); line-height: 1.35; }
-@media (max-width: 899px) {
+@media (max-width: 1023px) {
   .lado, .texto { grid-column: 1 / -1; }
   .lado { position: static; margin-bottom: 28px; }
+  .texto { max-width: 34em; }
 }
 
 /* ------------------------------------------------------------ o índice dos oito pilares */
@@ -132,48 +136,52 @@ p { text-wrap: pretty; }
 .pilar-card__r { display: block; margin-top: 8px; color: var(--secundario); font-size: 1.0625rem; line-height: 1.5; }
 .pilar-card:hover .pilar-card__t, .pilar-card:focus-visible .pilar-card__t { color: var(--petroleo); }
 .pilar-card:hover .calcada-tira, .pilar-card:focus-visible .calcada-tira { background-position: calc(var(--tira-x, 0px) + 48px) 100%; }
+/* com rato, o cartão sobe 2 px ao passar e volta a assentar ao clicar */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .pilar-card { transition: transform .2s ease; }
+  .pilar-card:hover { transform: translateY(-2px); }
+  .pilar-card:active { transform: none; }
+}
 @media (max-width: 899px) { .pilares { grid-template-columns: minmax(0, 1fr); gap: 36px; } }
 @media (max-width: 599px) { .numero { font-size: 3.25rem; min-width: 40px; } .pilar-card__corpo { gap: 16px; } .pilar-card__t { font-size: 1.3125rem; } }
 
 /* ------------------------------------------------------------ os oito pilares, por inteiro */
 .pilar { scroll-margin-top: 0; }
 .pilar__tira { height: 12px; margin-bottom: clamp(36px, 5vw, 64px); }
-.pilar__cabeca { display: grid; gap: 18px; justify-items: start; }
-.pilar__cabeca .numero { font-size: clamp(4.5rem, 3rem + 4.5vw, 7.5rem); }
+.pilar__cabeca { display: grid; gap: clamp(12px, 1.6vw, 18px); justify-items: start; }
+.pilar__cabeca .numero { font-size: clamp(4rem, 3rem + 4.5vw, 7.5rem); min-width: 0; }
 .pilar__parte { margin-top: clamp(48px, 6vw, 80px); }
-.pilar__voltar { grid-column: 6 / span 7; margin-top: 40px; font-family: var(--titulos); font-size: 1rem; }
+.pilar__voltar { grid-column: 7 / span 6; margin-top: 40px; font-family: var(--titulos); font-size: 1rem; }
 .pilar__voltar a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: var(--petroleo); }
 .pilar__voltar a span { transition: transform .2s ease; }
 .pilar__voltar a:hover span { transform: translateY(-3px); }
 .pilar__voltar a u { text-decoration-thickness: 1px; text-underline-offset: 4px; }
-@media (max-width: 899px) {
-  .pilar__cabeca { grid-template-columns: auto minmax(0, 1fr); align-items: end; gap: 18px; }
-  .pilar__cabeca .numero { font-size: 4rem; min-width: 0; }
-  .pilar__voltar { grid-column: 1 / -1; margin-top: 28px; }
-}
+@media (max-width: 1023px) { .pilar__voltar { grid-column: 1 / -1; margin-top: 28px; } }
 
 /* ------------------------------------------------------------ o país que queremos, sobre petróleo */
 .mar { margin-top: var(--ar); padding-top: var(--ar); background: var(--petroleo); color: var(--calcario); overflow: hidden; overflow: clip; }
 .mar h2 { color: var(--calcario); }
-.mar__texto { grid-column: 6 / span 7; font-family: var(--titulos); font-weight: 600; font-size: clamp(1.5rem, 1rem + 2vw, 2.375rem); line-height: 1.22; letter-spacing: -0.015em; }
+.mar__texto { grid-column: 7 / span 6; font-family: var(--titulos); font-weight: 600; font-size: clamp(1.5rem, 1rem + 2vw, 2.375rem); line-height: 1.22; letter-spacing: -0.015em; }
 .mar__texto strong { font-weight: inherit; }
 .mar__ondas { height: clamp(110px, 17.5vw, 252px); margin-top: var(--ar); background: var(--junta) url(/assets/ondas.svg) repeat-x 0 100% / auto 100%; }
 .acende .w { opacity: .56; transition: opacity .3s ease; }
 .acende .w.on { opacity: 1; }
-@media (max-width: 899px) { .mar__texto { grid-column: 1 / -1; } }
+@media (max-width: 1023px) { .mar__texto { grid-column: 1 / -1; } }
 
 /* ------------------------------------------------------------ rodapé */
 .rodape__grelha { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; row-gap: 48px; padding-block: clamp(48px, 6vw, 80px) 40px; }
-.rodape__marca { grid-column: 1 / span 4; display: grid; gap: 14px; align-content: start; }
-.rodape__nome { font-family: var(--titulos); font-weight: 800; letter-spacing: -0.01em; color: var(--vinho); font-size: 1.25rem; }
+.rodape__marca { grid-column: 1 / span 5; display: grid; gap: 14px; align-content: start; }
+.rodape__nome { justify-self: start; display: inline-flex; align-items: center; min-height: 44px; font-family: var(--titulos); font-weight: 800; letter-spacing: -0.01em; color: var(--vinho); font-size: 1.25rem; transition: color .2s ease; }
+.rodape__nome:hover { color: var(--petroleo); }
 .rodape__lede { font-style: italic; font-size: 1.375rem; line-height: 1.25; max-width: 16em; }
-.rodape__lista { grid-column: 6 / span 7; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; font-family: var(--titulos); font-size: 1rem; }
-.rodape__lista a { display: inline-flex; align-items: center; min-height: 44px; transition: color .2s ease; }
-.rodape__lista a:hover { color: var(--petroleo); }
+.rodape__lista { grid-column: 7 / span 6; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; font-family: var(--titulos); font-size: 1rem; }
+.rodape__lista a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 1px; text-underline-offset: 4px;
+  transition: color .2s ease, text-decoration-color .2s ease; }
+.rodape__lista a:hover { color: var(--petroleo); text-decoration-color: currentColor; }
 .rodape__legal { grid-column: 1 / -1; display: grid; gap: 6px; font-family: var(--titulos); font-size: 0.875rem; line-height: 1.5; color: var(--secundario); }
 .rodape__legal a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .rodape__legal a:hover { color: var(--petroleo); }
-@media (max-width: 899px) { .rodape__marca, .rodape__lista { grid-column: 1 / -1; } }
+@media (max-width: 1023px) { .rodape__marca, .rodape__lista { grid-column: 1 / -1; } }
 @media (max-width: 599px) { .rodape__lista { grid-template-columns: minmax(0, 1fr); } }
 
 /* ------------------------------------------------------------ página não encontrada */

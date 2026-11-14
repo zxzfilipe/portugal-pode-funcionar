@@ -55,7 +55,7 @@ function Pilar({ p }) {
           </div>
         ))}
         <div className="leitura">
-          <p className="pilar__voltar"><a href="#pilares"><Seta /><u>Voltar aos oito pilares</u></a></p>
+          <p className="pilar__voltar"><a href="#pilares"><u>Voltar aos oito pilares</u><Seta /></a></p>
         </div>
       </div>
     </section>
