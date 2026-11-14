@@ -17,7 +17,7 @@ for (const raw of fonte.replace(/\r\n/g, '\n').split('\n')) {
 const resumos = [...marca.matchAll(/^(\d)\.\s+(.+)$/gm)].map(m => m[2]);
 
 // A conta para seguir, no fim da página ("Acreditas na visão?").
-export const instagram = { nome: '@portugalfuncionar.pt', url: 'https://www.instagram.com/portugalfuncionar.pt/' };
+export const instagram = { nome: '@portugalpodefuncionar.pt', url: 'https://www.instagram.com/portugalpodefuncionar.pt/' };
 
 export const subtitulo = 'Um país do futuro precisa de instituições do futuro.';
 export const autor = 'Filipe Ferreira';

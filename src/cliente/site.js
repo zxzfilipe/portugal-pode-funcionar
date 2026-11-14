@@ -1,4 +1,4 @@
-// O que o site faz no browser: o globo conduzido pelo scroll e as palavras que se acendem no fim.
+// O que o site faz no browser: o globo, que faz a viagem toda ao primeiro scroll, e as palavras que se acendem no fim.
 import { criarGlobo } from '../globo/globo.js';
 import { estado } from '../globo/pedras.js';
 
@@ -19,8 +19,10 @@ const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
   // com "reduzir movimento": Portugal ao centro e a ZEE a vinho, sem cena
   if (calmo) { marca('calmo'); g.desenha(estado(0.8)); addEventListener('resize', () => g.desenha()); return; }
 
-  // a cena: o palco fica preso ao ecrã ao longo de `percurso` px de scroll, e o progresso (0 a 1) conduz o globo
+  // a cena: mal se começa a descer, o globo faz a viagem toda sozinho (e desfaz-a se se voltar ao topo);
+  // o palco fica preso ao ecrã ao longo de `percurso` px de scroll para dar tempo de a ver
   let percurso = 1, topo = 0, alvo = 0, atual = 0, raf = 0, antes = 0, largura = 0, altura = 0;
+  const IDA = 2600, VOLTA = 900;                                           // ms da viagem toda, e de a desfazer
   let inicio = 0;                                                          // o relógio da chegada começa na primeira imagem desenhada
   const sonda = document.createElement('div'); sonda.style.cssText = 'position:fixed;top:0;left:0;width:0;height:100vh;visibility:hidden;pointer-events:none';
   sonda.style.height = '100lvh'; document.body.append(sonda);
@@ -28,20 +30,19 @@ const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
   function medir() {
     largura = innerWidth; altura = sonda.offsetHeight || innerHeight;      // a altura do ecrã com as barras do browser recolhidas
     const h = palco.offsetHeight;
-    percurso = Math.round(altura * (largura < 900 ? 1.05 : 1.15));
+    percurso = Math.round(altura * 0.6);
     // se o palco não cabe no ecrã, prende-se pela base; mas nunca corta mais do que as ondas e a margem do título
     topo = Math.max(Math.min(0, altura - h), -(ondas.offsetHeight + titulo.offsetHeight * 0.05));
     sec.style.setProperty('--palco-h', h + 'px'); sec.style.setProperty('--percurso', percurso + 'px'); sec.style.setProperty('--palco-top', Math.round(topo) + 'px');
     sec.classList.add('abertura--cena');
     ler(); pedir();
   }
-  function ler() { alvo = Math.min(1, Math.max(0, (-sec.getBoundingClientRect().top + topo) / percurso)); }
+  function ler() { alvo = scrollY > 2 ? 1 : 0; }
   function quadro(agora) {
     raf = 0;
     if (!inicio) inicio = agora;
     const dt = Math.min(64, agora - antes || 16); antes = agora;
-    atual += (alvo - atual) * (1 - Math.exp(-dt / 65));                   // o globo segue o scroll com um nada de inércia
-    if (Math.abs(alvo - atual) < 0.0004) atual = alvo;
+    atual = alvo > atual ? Math.min(1, atual + dt / IDA) : Math.max(0, atual - dt / VOLTA);   // corre no tempo, não no scroll
     const a = Math.min(1, (agora - inicio) / 1600), e = estado(atual);
     e.assentar = 1 - Math.pow(1 - a, 3);                                   // à chegada, as pedras assentam de Portugal para fora
     g.desenha(e);
