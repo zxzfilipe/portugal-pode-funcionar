@@ -1,4 +1,4 @@
-import { aoQueVimos, final, pilares, subtitulo, autor, data, slug, formulario } from './content/manifesto.js';
+import { aoQueVimos, final, pilares, subtitulo, autor, data, slug, instagram } from './content/manifesto.js';
 
 // Uma só página, lida de corrido: a abertura em calçada com o globo, Ao que vimos, o índice,
 // os oito pilares por inteiro e O país que queremos. O texto vem tal e qual de manifesto.txt.
@@ -120,19 +120,16 @@ export function Inicio() {
             <h2 className="lado" id="futuro-h">{final.title}</h2>
             <p className="mar__texto" data-acende="">{antes}<strong>vai escolher ficar</strong>{depois}</p>
           </div>
-          {formulario && (
-            <div className="wrap leitura novidades">
-              <h2 className="lado" id="novidades-h">Acreditas na visão?</h2>
-              <form className="novidades__form" action={formulario} method="post" aria-labelledby="novidades-h">
-                <p className="novidades__lede">Deixa o teu email para receberes novidades.</p>
-                <div className="campo"><label htmlFor="n-nome">Nome</label><input id="n-nome" name="nome" type="text" autoComplete="name" required /></div>
-                <div className="campo"><label htmlFor="n-email">Email</label><input id="n-email" name="email" type="email" autoComplete="email" inputMode="email" required /></div>
-                <button type="submit">Quero receber novidades</button>
-                <p className="novidades__nota">O nome e o email servem só para te enviar novidades do Portugal Pode Funcionar. Podes pedir para sair a qualquer momento.</p>
-                <p className="novidades__estado" role="status" />
-              </form>
+          <div className="wrap leitura novidades">
+            <h2 className="lado" id="novidades-h">Acreditas na visão?</h2>
+            <div className="novidades__corpo">
+              <p className="novidades__lede">Segue o Portugal Pode Funcionar no Instagram.</p>
+              <a className="novidades__insta" href={instagram.url} rel="noopener me">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4.2" /><circle cx="17.3" cy="6.7" r="1.1" className="ponto" /></svg>
+                <span>{instagram.nome}</span>
+              </a>
             </div>
-          )}
+          </div>
           <div className="mar__ondas" aria-hidden="true" />
         </section>
       </main>

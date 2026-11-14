@@ -86,19 +86,3 @@ const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
   atualiza();
 })();
 
-// ---------------------------------------------------------------- "Acreditas na visão?": o formulário envia sem sair da página
-(function novidades() {
-  const f = document.querySelector('.novidades__form'); if (!f) return;
-  const estado = f.querySelector('[role=status]'), botao = f.querySelector('button');
-  f.addEventListener('submit', async ev => {
-    ev.preventDefault();
-    if (!f.reportValidity()) return;
-    botao.disabled = true; estado.textContent = 'A enviar';
-    try {
-      const r = await fetch(f.action, { method: 'POST', body: new FormData(f), headers: { Accept: 'application/json' } });
-      if (!r.ok) throw new Error(r.status);
-      f.reset(); estado.textContent = 'Fica registado. Obrigado por acreditares.';
-    } catch (e) { estado.textContent = 'Não foi possível enviar. Tenta outra vez daqui a pouco.'; }
-    botao.disabled = false;
-  });
-})();

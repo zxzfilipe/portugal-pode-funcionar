@@ -16,9 +16,8 @@ for (const raw of fonte.replace(/\r\n/g, '\n').split('\n')) {
 // resumos dos pilares: texto do autor, da versão para partilhar (MARCA.md)
 const resumos = [...marca.matchAll(/^(\d)\.\s+(.+)$/gm)].map(m => m[2]);
 
-// Para onde o formulário "Acreditas na visão?" envia o nome e o email (por exemplo um endereço do Formspree).
-// Vazio: o formulário não aparece no site.
-export const formulario = '';
+// A conta para seguir, no fim da página ("Acreditas na visão?").
+export const instagram = { nome: '@portugalfuncionar.pt', url: 'https://www.instagram.com/portugalfuncionar.pt/' };
 
 export const subtitulo = 'Um país do futuro precisa de instituições do futuro.';
 export const autor = 'Filipe Ferreira';
