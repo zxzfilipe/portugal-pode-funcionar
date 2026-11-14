@@ -84,3 +84,12 @@ const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
   atualiza();
 })();
 
+// ---------------------------------------------------------------- os parágrafos chegam à medida que se desce
+(function chega() {
+  if (calmo || !window.IntersectionObserver) return;
+  const els = document.querySelectorAll('.texto p, .pilar__parte > h3'); if (!els.length) return;
+  // conta como visto tudo o que já ficou para cima, para nada ficar escondido depois de um salto na página
+  const io = new IntersectionObserver(es => { for (const e of es) if (e.isIntersecting) { e.target.classList.add('visto'); io.unobserve(e.target); } }, { rootMargin: '100000px 0px -6% 0px' });
+  document.documentElement.classList.add('anima');
+  els.forEach(e => io.observe(e));
+})();

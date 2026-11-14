@@ -3,7 +3,13 @@ import { aoQueVimos, final, pilares, subtitulo, autor, data, slug, instagram, li
 // Uma só página, lida de corrido: a abertura em calçada com o globo, Ao que vimos, o índice,
 // os oito pilares por inteiro e O país que queremos. O texto vem tal e qual de manifesto.txt.
 
-const Paras = ({ list, abre = false }) => list.map((t, i) => <p key={i} className={abre && i === 0 ? 'abre' : undefined}>{t}</p>);
+// Cada parágrafo abre com a sua primeira frase em destaque, para se poder ler na diagonal. As palavras não mudam.
+const frases = t => { const m = t.match(/^(.+?[.?!])(\s+)(?=[A-ZÀ-Ý])(.*)$/); return m ? [m[1], m[2] + m[3]] : [t, '']; };
+const Paras = ({ list, abre = false }) => list.map((t, i) => {
+  if (abre && i === 0) return <p key={i} className="abre">{t}</p>;
+  const [primeira, resto] = frases(t);
+  return <p key={i}><span className="frase">{primeira}</span>{resto}</p>;
+});
 const ancora = p => `pilar-${p.n}`;
 const Seta = () => <span aria-hidden="true">↑</span>;
 
