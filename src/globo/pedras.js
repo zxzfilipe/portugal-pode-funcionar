@@ -67,7 +67,7 @@ export function gerarPedras(aneis, quer) {
 // ---------------------------------------------------------------- a câmara
 // Três vistas: A (ao largo: o Atlântico inteiro, com Portugal na periferia), C (Portugal ao centro do mundo)
 // e Z (mais perto, a enquadrar o mar português todo, dos Açores ao continente).
-export const VISTAS = { a: { lon: -40, lat: 20, P: 3.6 }, c: { lon: CENTRO[0], lat: CENTRO[1], P: 2 }, z: { lon: -17.5, lat: 37.2, P: 1.42 } };
+export const VISTAS = { a: { lon: -66, lat: 8, P: 4.4 }, c: { lon: CENTRO[0], lat: CENTRO[1], P: 2 }, z: { lon: -17.5, lat: 37.2, P: 1.33 } };
 const rad = Math.PI / 180;
 const vec = v => [Math.cos(v.lat * rad) * Math.cos(v.lon * rad), Math.cos(v.lat * rad) * Math.sin(v.lon * rad), Math.sin(v.lat * rad)];
 const suave = x => { x = Math.min(1, Math.max(0, x)); return x * x * x * (x * (x * 6 - 15) + 10); };

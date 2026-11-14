@@ -16,6 +16,10 @@ for (const raw of fonte.replace(/\r\n/g, '\n').split('\n')) {
 // resumos dos pilares: texto do autor, da versão para partilhar (MARCA.md)
 const resumos = [...marca.matchAll(/^(\d)\.\s+(.+)$/gm)].map(m => m[2]);
 
+// Para onde o formulário "Acreditas na visão?" envia o nome e o email (por exemplo um endereço do Formspree).
+// Vazio: o formulário não aparece no site.
+export const formulario = '';
+
 export const subtitulo = 'Um país do futuro precisa de instituições do futuro.';
 export const autor = 'Filipe Ferreira';
 export const data = '26 de outubro de 2026';

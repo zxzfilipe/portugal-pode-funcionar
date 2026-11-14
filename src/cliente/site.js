@@ -28,7 +28,7 @@ const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
   function medir() {
     largura = innerWidth; altura = sonda.offsetHeight || innerHeight;      // a altura do ecrã com as barras do browser recolhidas
     const h = palco.offsetHeight;
-    percurso = Math.round(altura * (largura < 900 ? 2.1 : 2.4));
+    percurso = Math.round(altura * (largura < 900 ? 1.05 : 1.15));
     // se o palco não cabe no ecrã, prende-se pela base; mas nunca corta mais do que as ondas e a margem do título
     topo = Math.max(Math.min(0, altura - h), -(ondas.offsetHeight + titulo.offsetHeight * 0.05));
     sec.style.setProperty('--palco-h', h + 'px'); sec.style.setProperty('--percurso', percurso + 'px'); sec.style.setProperty('--palco-top', Math.round(topo) + 'px');
@@ -40,7 +40,7 @@ const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
     raf = 0;
     if (!inicio) inicio = agora;
     const dt = Math.min(64, agora - antes || 16); antes = agora;
-    atual += (alvo - atual) * (1 - Math.exp(-dt / 110));                   // o globo segue o scroll com um nada de inércia
+    atual += (alvo - atual) * (1 - Math.exp(-dt / 65));                   // o globo segue o scroll com um nada de inércia
     if (Math.abs(alvo - atual) < 0.0004) atual = alvo;
     const a = Math.min(1, (agora - inicio) / 1600), e = estado(atual);
     e.assentar = 1 - Math.pow(1 - a, 3);                                   // à chegada, as pedras assentam de Portugal para fora
@@ -84,4 +84,21 @@ const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const pedir = () => { if (!raf) raf = requestAnimationFrame(atualiza); };
   addEventListener('scroll', pedir, { passive: true }); addEventListener('resize', pedir);
   atualiza();
+})();
+
+// ---------------------------------------------------------------- "Acreditas na visão?": o formulário envia sem sair da página
+(function novidades() {
+  const f = document.querySelector('.novidades__form'); if (!f) return;
+  const estado = f.querySelector('[role=status]'), botao = f.querySelector('button');
+  f.addEventListener('submit', async ev => {
+    ev.preventDefault();
+    if (!f.reportValidity()) return;
+    botao.disabled = true; estado.textContent = 'A enviar';
+    try {
+      const r = await fetch(f.action, { method: 'POST', body: new FormData(f), headers: { Accept: 'application/json' } });
+      if (!r.ok) throw new Error(r.status);
+      f.reset(); estado.textContent = 'Fica registado. Obrigado por acreditares.';
+    } catch (e) { estado.textContent = 'Não foi possível enviar. Tenta outra vez daqui a pouco.'; }
+    botao.disabled = false;
+  });
 })();
